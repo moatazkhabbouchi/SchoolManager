@@ -1,5 +1,7 @@
 package com.example.schoolmanager.Models;
 
+import com.example.schoolmanager.Services.EnseignantService;
+
 import java.util.List;
 
 public class Emploi {
@@ -9,6 +11,8 @@ public class Emploi {
     private String jour;
     private String heure;
     private Enseignant enseignant;
+
+
 
     public Emploi(String classe, String matiere, String jour, String heure, Enseignant enseignant) {
         this.classe = classe;

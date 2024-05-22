@@ -1,23 +1,25 @@
 package com.example.schoolmanager.Controllers;
 
+import com.example.schoolmanager.HelloApplication;
 import com.example.schoolmanager.Models.Emploi;
 import com.example.schoolmanager.Models.Enseignant;
 import com.example.schoolmanager.Services.EmploiService;
 import com.example.schoolmanager.Services.EnseignantService;
-import io.github.palexdev.materialfx.controls.MFXListView;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -43,6 +45,9 @@ public class EnseignementController implements Initializable {
 
     @FXML
     private Button supprimerButton;
+
+    @FXML
+    private Button deleteUnknown;
 
     @FXML
     private TableView<Enseignant> tEnseignants;
@@ -98,6 +103,14 @@ public class EnseignementController implements Initializable {
     @FXML
     private TableColumn<Emploi, String> colEnseignant;
 
+
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
+
+    @FXML
+    private AnchorPane scene1AnchorPane;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         this.lesJours.setValue("Les jours");
@@ -121,12 +134,13 @@ public class EnseignementController implements Initializable {
         colHeure.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getHeure()));
         colEnseignant.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEnseignant().getMatricule()));
 
+
         try {
             listeEnseignant = ES.getAllEnseignant();
             tEnseignants.getItems().addAll(listeEnseignant);
             listeEmploi = empService.getAll();
             tEmploi.getItems().addAll(listeEmploi);
-            System.out.println(tEnseignants.getItems());
+            System.out.println(tEmploi.getItems());
         } catch (IllegalStateException ex) {
             System.out.println(ex.getMessage());
         }
@@ -152,11 +166,12 @@ public class EnseignementController implements Initializable {
         if(!this.lesJours.getValue().isEmpty()
         && !this.lesClasses.getValue().isEmpty()
         && !this.lesHeures.getValue().isEmpty()
-        && !this.matiere.getText().isEmpty()
-        && !this.matriculePourEmploi.getText().isEmpty()){
+        && !this.matiere.getText().isEmpty()){
             empService = new EmploiService();
             ES = new EnseignantService();
-            message = empService.addEmploi(new Emploi(this.lesClasses.getValue(), this.matiere.getText(), this.lesJours.getValue(), this.lesHeures.getValue(), ES.getEnseignantByMatricule(this.matriculePourEmploi.getText())));
+            Enseignant emp1 = ES.getEnseignantByMatricule(this.matriculePourEmploi.getText());
+            System.out.println(emp1);
+            message = empService.addEmploi(new Emploi(this.lesClasses.getValue(), this.matiere.getText(), this.lesJours.getValue(), this.lesHeures.getValue(), emp1));
             System.out.println(message);
             refreshTable();
         }
@@ -165,6 +180,7 @@ public class EnseignementController implements Initializable {
     @FXML
     void handleSupprimerButton(ActionEvent event){
         ES = new EnseignantService();
+        empService.setUnknown(this.matricule.getText());
         ES.deleteEnseignant(this.matricule.getText());
         refreshTable();
     }
@@ -185,8 +201,28 @@ public class EnseignementController implements Initializable {
         tEnseignants.getItems().addAll(listeEnseignant);
 
     }
+    @FXML
+    void handleRequeteButton(ActionEvent e){
+
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Requete.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 1280, 800);
+            Stage stage = new Stage();
+            stage.setTitle("Requete");
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception exception){
+            System.out.println(exception.getMessage());
+        }
 
 
+    }
+
+    @FXML
+    void handleDeleteUnknown(){
+        empService.deleteAllUknown();
+        refreshTable();
+    }
     private void showAlert(String title, String message){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -194,9 +230,9 @@ public class EnseignementController implements Initializable {
         alert.showAndWait();
     }
 
-    private void refreshTable(){
+    public void refreshTable(){
         ES = new EnseignantService();
-        empService = new EmploiService();
+
         try {
             tEnseignants.getItems().clear();
             listeEnseignant = ES.getAllEnseignant();
@@ -211,6 +247,7 @@ public class EnseignementController implements Initializable {
         } catch (IllegalStateException ex) {
             System.out.println(ex.getMessage());
         }
+
 
     }
 }

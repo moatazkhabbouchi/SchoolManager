@@ -114,8 +114,10 @@
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="65.0" prefWidth="356.0" spacing="16.0">
                      <children>
                         <Button fx:id="enregistrerButton1" mnemonicParsing="false" onAction="#handleEnregistrerButton2" text="Enregistrer" />
+                        <Button fx:id="RequeteButton" mnemonicParsing="false" onAction="#handleRequeteButton" text="Requetes" />
                      </children>
                   </HBox>
+                  <Button fx:id="deleteUnknwon" mnemonicParsing="false" onAction="#handleDeleteUnknown" text="Supprimer Seances sans Enseignant" />
                </children>
             </VBox>
          </children>

@@ -9,6 +9,7 @@ import java.util.List;
 
 public class EnseignantService {
     Connection cnx = DB.getInstance().getCnx();
+
     public String addEnseignant(Enseignant e){
         try{
             String query = "INSERT INTO enseignant (matricule, nom, contact) VALUES (?,?,?)";
@@ -28,7 +29,7 @@ public class EnseignantService {
     public List<Enseignant> getAllEnseignant(){
         List<Enseignant> lEnseignants = new ArrayList<>();
         try{
-            String query = "SELECT * FROM enseignant";
+            String query = "SELECT * FROM enseignant where matricule <> 'UNKNOWN'";
             PreparedStatement ps = cnx.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
@@ -44,8 +45,10 @@ public class EnseignantService {
         return lEnseignants;
     }
 
+
+
     public void deleteEnseignant(String matricule){
-        List<Enseignant> lEnseignants = new ArrayList<>();
+
         try{
             String query = "DELETE FROM enseignant WHERE matricule = ?";
             PreparedStatement ps = cnx.prepareStatement(query);
@@ -97,6 +100,7 @@ public class EnseignantService {
             PreparedStatement ps = cnx.prepareStatement(query);
             ps.setString(1, matricule);
             ResultSet rs = ps.executeQuery();
+
             while(rs.next()){
                 e.setMatricule(rs.getString("matricule"));
                 e.setNom(rs.getString("nom"));
