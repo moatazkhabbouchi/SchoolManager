@@ -73,6 +73,37 @@ public class EmploiService {
         return rs;
     }
 
+    public ResultSet getAllEmploiEnseignant(String classe){
+        ResultSet rs;
+        try{
+            String query = "SELECT e.emploiId, e.classe, e.matiere, e.jour, e.heure, es.nom, es.contact  FROM emploi e, enseignant es where e.matriculeEnseignant = es.matricule and e.classe=?";
+            PreparedStatement ps = cnx.prepareStatement(query);
+            ps.setString(1, classe);
+            rs = ps.executeQuery();
+
+        }catch(SQLException ex){
+            System.out.println("here:" + ex.getMessage());
+            rs = null;
+        }
+        return rs;
+    }
+
+    public ResultSet getAllEmploiEnseignant(String classe, String matiere){
+        ResultSet rs;
+        try{
+            String query = "SELECT e.emploiId, e.classe, e.matiere, e.jour, e.heure, es.nom, es.contact  FROM emploi e, enseignant es where e.matriculeEnseignant = es.matricule and e.classe=? and e.matiere = ?";
+            PreparedStatement ps = cnx.prepareStatement(query);
+            ps.setString(1, classe);
+            ps.setString(2, matiere);
+            rs = ps.executeQuery();
+
+        }catch(SQLException ex){
+            System.out.println("here:" + ex.getMessage());
+            rs = null;
+        }
+        return rs;
+    }
+
     public void setUnknown(String matricule){
         try{
             String query = "UPDATE emploi e SET matriculeEnseignant = 'UNKNOWN' WHERE e.matriculeEnseignant = ?";
@@ -105,6 +136,20 @@ public class EmploiService {
 
         }catch(SQLException ex){
             System.out.println(ex.getMessage());
+        }
+    }
+
+    public void setEnseignat(int idEmploi, String matricule){
+        try{
+            String query = "UPDATE emploi e SET matriculeEnseignant = ? WHERE e.emploiId = ?";
+            PreparedStatement ps = cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, matricule);
+            ps.setInt(2, idEmploi);
+            int rowsAffected = ps.executeUpdate();
+            System.out.println(rowsAffected);
+
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
 }

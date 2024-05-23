@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane fx:id="scene1AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanager.Controllers.RequeteController">
+<AnchorPane fx:id="scene1AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanager.Controllers.RequeteController">
    <children>
-      <Text layoutX="1009.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chercher Séance">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="254.0" layoutX="978.0" layoutY="483.0" stroke="BLACK" strokeType="INSIDE" width="251.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="390.0" layoutX="980.0" layoutY="67.0" stroke="BLACK" strokeType="INSIDE" width="251.0" />
+      <Text layoutX="1001.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chercher Séance">
          <font>
             <Font name="System Italic" size="18.0" />
          </font>
       </Text>
-      <TextField fx:id="ChercherSeanceClasse" layoutX="1009.0" layoutY="167.0" prefHeight="25.0" prefWidth="206.0" promptText="Classe" />
-      <TextField fx:id="ChercherSéanceMatiere" layoutX="1009.0" layoutY="202.0" prefHeight="25.0" prefWidth="206.0" promptText="Matère" />
-      <TableView fx:id="tableView" layoutX="78.0" layoutY="126.0" prefHeight="614.0" prefWidth="902.0">
+      <ChoiceBox fx:id="lesClasses" layoutX="1003.0" layoutY="119.0" prefHeight="25.0" prefWidth="206.0" />
+      <TextField fx:id="ChercherSeanceMatiere" layoutX="1001.0" layoutY="169.0" prefHeight="25.0" prefWidth="206.0" promptText="Matière">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TableView fx:id="tableView" layoutX="52.0" layoutY="67.0" prefHeight="390.0" prefWidth="902.0">
         <columns>
           <TableColumn fx:id="idCol" prefWidth="36.0" text="ID" />
           <TableColumn fx:id="classeCol" prefWidth="92.0" text="Classe" />
@@ -26,36 +32,40 @@
             <TableColumn fx:id="jourCol" minWidth="0.0" prefWidth="126.0" text="Jour" />
             <TableColumn fx:id="heureCol" prefWidth="126.0" text="Heure" />
             <TableColumn fx:id="nomCol" prefWidth="173.0" text="Nom Enseignant" />
-            <TableColumn fx:id="contactCol" prefWidth="208.0" text="Contact" />
+            <TableColumn fx:id="contactCol" prefWidth="203.0" text="Contact" />
         </columns>
       </TableView>
-      <TextField fx:id="ChercherEmploiClasse" layoutX="1010.0" layoutY="345.0" prefHeight="25.0" prefWidth="206.0" promptText="Classe" />
-      <Button fx:id="chercher2" layoutX="1010.0" layoutY="384.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="206.0" text="Chercher" />
-      <Button fx:id="chercher1" layoutX="1009.0" layoutY="240.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="206.0" text="Chercher" />
-      <Text layoutX="1010.0" layoutY="327.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chercher Emploi d'une classe">
+      <TableView fx:id="tEnseignants" layoutX="52.0" layoutY="483.0" prefHeight="254.0" prefWidth="902.0">
+         <columns>
+            <TableColumn fx:id="matriculeCol" prefWidth="214.0" text="Matricule" />
+            <TableColumn fx:id="nomCol2" prefWidth="373.0" text="Nom" />
+            <TableColumn fx:id="contactCol2" minWidth="0.0" prefWidth="306.0" text="Contact" />
+         </columns>
+      </TableView>
+      <Button fx:id="chercher1" layoutX="1001.0" layoutY="227.0" mnemonicParsing="false" onAction="#handleChercher1" prefHeight="25.0" prefWidth="206.0" style="-fx-padding: 15; -fx-background-color: #99cc33;" text="Chercher" />
+      <Text layoutX="1004.0" layoutY="323.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Supprimer Séance">
          <font>
             <Font name="System Italic" size="18.0" />
          </font>
       </Text>
-      <Text layoutX="78.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emplois du temps">
+      <TextField fx:id="SupprimerSeanceId" layoutX="1004.0" layoutY="339.0" prefHeight="25.0" prefWidth="206.0" promptText="ID Seance">
          <font>
-            <Font name="System Italic" size="24.0" />
-         </font>
-      </Text>
-      <Text layoutX="1011.0" layoutY="650.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Supprimer Séance">
-         <font>
-            <Font name="System Italic" size="18.0" />
-         </font>
-      </Text>
-      <TextField fx:id="SupprimerSeanceId" layoutX="1011.0" layoutY="666.0" prefHeight="25.0" prefWidth="206.0" promptText="ID Seance" />
-      <Button fx:id="supprimer" layoutX="1010.0" layoutY="702.0" mnemonicParsing="false" onAction="#handleSupprimerSeance" prefHeight="25.0" prefWidth="206.0" text="Supprimer" />
-      <Text layoutX="1011.0" layoutY="474.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Affecter Enseignant">
+            <Font size="20.0" />
+         </font></TextField>
+      <Button fx:id="supprimer" layoutX="1003.0" layoutY="385.0" mnemonicParsing="false" onAction="#handleSupprimerSeance" prefHeight="25.0" prefWidth="206.0" style="-fx-background-color: #e54141; -fx-padding: 15;" text="Supprimer" />
+      <Text layoutX="999.0" layoutY="528.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Affecter Enseignant">
          <font>
             <Font name="System Italic" size="18.0" />
          </font>
       </Text>
-      <TextField fx:id="AffecterSeanceEnseignant" layoutX="1011.0" layoutY="495.0" prefHeight="25.0" prefWidth="206.0" promptText="ID Seance" />
-      <TextField fx:id="AffecterEnseignantID" layoutX="1011.0" layoutY="530.0" prefHeight="25.0" prefWidth="206.0" promptText="ID Enseignant" />
-      <Button fx:id="affecter" layoutX="1011.0" layoutY="568.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="206.0" text="Affecter" />
+      <TextField fx:id="AffecterSeanceEnseignant" layoutX="999.0" layoutY="559.0" prefHeight="25.0" prefWidth="206.0" promptText="ID Seance">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="AffecterEnseignantID" layoutX="1001.0" layoutY="610.0" prefHeight="25.0" prefWidth="206.0" promptText="ID Enseignant">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <Button fx:id="affecter" layoutX="1001.0" layoutY="660.0" mnemonicParsing="false" onAction="#handleAffecterButton" prefHeight="25.0" prefWidth="206.0" style="-fx-background-color: #40a6ce; -fx-padding: 15;" text="Affecter" />
    </children>
 </AnchorPane>

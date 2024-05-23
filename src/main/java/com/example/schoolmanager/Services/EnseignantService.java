@@ -10,7 +10,7 @@ import java.util.List;
 public class EnseignantService {
     Connection cnx = DB.getInstance().getCnx();
 
-    public String addEnseignant(Enseignant e){
+    public int addEnseignant(Enseignant e){
         try{
             String query = "INSERT INTO enseignant (matricule, nom, contact) VALUES (?,?,?)";
             PreparedStatement ps = cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -19,10 +19,10 @@ public class EnseignantService {
             ps.setInt(3, e.getContact());
 
             int rowsAffected = ps.executeUpdate();
-            return e.toString();
+            return rowsAffected;
         }catch(SQLException ex){
             System.out.println(ex.getMessage());
-            return ex.getMessage();
+            return 0;
         }
 
     }
@@ -47,29 +47,33 @@ public class EnseignantService {
 
 
 
-    public void deleteEnseignant(String matricule){
+    public int deleteEnseignant(String matricule){
 
         try{
             String query = "DELETE FROM enseignant WHERE matricule = ?";
             PreparedStatement ps = cnx.prepareStatement(query);
             ps.setString(1, matricule);
-            System.out.println(ps.executeUpdate());
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected;
 
         }catch(SQLException ex){
             System.out.println(ex.getMessage());
+            return 0;
         }
     }
 
-    public void updateEnseignant(Enseignant e, String matricule){
+    public int updateEnseignant(Enseignant e, String matricule){
         try{
             String query = "update enseignant set `nom` = ?, `contact` = ? where matricule = ?";
             PreparedStatement ps = cnx.prepareStatement(query);
             ps.setString(1, e.getNom());
             ps.setInt(2, e.getContact());
             ps.setString(3, matricule);
-            System.out.println(ps.executeUpdate());
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected;
         }catch(SQLException ex){
             System.out.println(ex.getMessage());
+            return 0;
         }
     }
 

@@ -5,6 +5,7 @@ import com.example.schoolmanager.Models.Emploi;
 import com.example.schoolmanager.Models.Enseignant;
 import com.example.schoolmanager.Services.EmploiService;
 import com.example.schoolmanager.Services.EnseignantService;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,11 +13,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -144,28 +149,68 @@ public class EnseignementController implements Initializable {
         } catch (IllegalStateException ex) {
             System.out.println(ex.getMessage());
         }
+        tEnseignants.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                matricule.setText(newValue.getMatricule());
+                nom.setText(newValue.getNom());
+                contact.setText(Integer.toString(newValue.getContact()));
+            }
+        });
+
+        tEnseignants.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.setOnKeyPressed(event -> {
+                    if (event.getCode() == KeyCode.F5) {
+                        refreshTable();
+                    }
+                });
+            }
+        });
     }
 
 
 
     @FXML
     void handleEnregistrerButton(ActionEvent event){
+        //contact trop long
+        boolean isNumber = isNumeric(this.contact.getText());
+        if(isNumber){
+            if(this.contact.getText().length() > 8){
+                showPopup("Contact trop long, Longueur Maximal est 8", "#e54141");
+                return;
+            }
+            //contact trop court
+            if(this.contact.getText().length() < 8){
+                showPopup("Contact trop court, Longueur minimal est 8", "#e54141");
+                return;
+            }
+
+        }else{
+            showPopup("Le contact saisi n'est pas un nombre", "#e54141");
+            return;
+        }
+
+
         if(!matricule.getText().isEmpty() && !nom.getText().isEmpty() && !contact.getText().isEmpty()){
             Enseignant e = new Enseignant(matricule.getText(), nom.getText(), Integer.parseInt(contact.getText()));
-            String message = ES.addEnseignant(e);
-            this.showAlert("Alert", message);
+            int rows = ES.addEnseignant(e);
+            if(rows != 0){
+                showPopup("Enseignant Ajouté avec Succès!", "green");
+            }else{
+                showPopup("Erreur Lors de l'ajout!","#e54141");
+            }
             refreshTable();
         }else{
-            this.showAlert("User not added", "Empty Fields");
+           showPopup("Champs vides", "#e54141");
         }
     }
 
     @FXML
     void handleEnregistrerButton2(ActionEvent event){
         String message;
-        if(!this.lesJours.getValue().isEmpty()
-        && !this.lesClasses.getValue().isEmpty()
-        && !this.lesHeures.getValue().isEmpty()
+        if(this.lesJours.getValue() != "Les jours"
+        && this.lesClasses.getValue() != "Les Classes"
+        && this.lesHeures.getValue() != "Les Heures"
         && !this.matiere.getText().isEmpty()){
             empService = new EmploiService();
             ES = new EnseignantService();
@@ -173,7 +218,10 @@ public class EnseignementController implements Initializable {
             System.out.println(emp1);
             message = empService.addEmploi(new Emploi(this.lesClasses.getValue(), this.matiere.getText(), this.lesJours.getValue(), this.lesHeures.getValue(), emp1));
             System.out.println(message);
+            showPopup("Séance Ajoutée avec Succès!", "green");
             refreshTable();
+        }else{
+            showPopup("Champs vides", "#e54141");
         }
     }
 
@@ -181,7 +229,12 @@ public class EnseignementController implements Initializable {
     void handleSupprimerButton(ActionEvent event){
         ES = new EnseignantService();
         empService.setUnknown(this.matricule.getText());
-        ES.deleteEnseignant(this.matricule.getText());
+        int rowsAffected = ES.deleteEnseignant(this.matricule.getText());
+        if(rowsAffected != 0){
+            showPopup("Suppression avec Succès!", "green");
+        }else{
+            showPopup("Erreur lors de la supression", "#e54141");
+        }
         refreshTable();
     }
 
@@ -189,7 +242,28 @@ public class EnseignementController implements Initializable {
     void handleModifierButton(ActionEvent event){
         ES = new EnseignantService();
         Enseignant e = new Enseignant(matricule.getText(), nom.getText(), Integer.parseInt(contact.getText()));
-        ES.updateEnseignant(e, this.matricule.getText());
+        int rowsAffected = ES.updateEnseignant(e, this.matricule.getText());
+        boolean isNumber = isNumeric(this.contact.getText());
+        if(isNumber){
+            if(this.contact.getText().length() > 8){
+                showPopup("Contact trop long, Longueur Maximal est 8", "#e54141");
+                return;
+            }
+            //contact trop court
+            if(this.contact.getText().length() < 8){
+                showPopup("Contact trop court, Longueur minimal est 8", "#e54141");
+                return;
+            }
+
+        }else{
+            showPopup("Le contact saisi n'est pas un nombre", "#e54141");
+            return;
+        }
+        if(rowsAffected!=0){
+            showPopup("Enseignant Modifié avec Succès!", "green");
+        }else{
+            showPopup("Erreur Lors de Modification", "#e54141");
+        }
         refreshTable();
     }
 
@@ -221,6 +295,7 @@ public class EnseignementController implements Initializable {
     @FXML
     void handleDeleteUnknown(){
         empService.deleteAllUknown();
+        showPopup("Seances sans enseignants ont été supprimées avec succès!", "green");
         refreshTable();
     }
     private void showAlert(String title, String message){
@@ -249,5 +324,32 @@ public class EnseignementController implements Initializable {
         }
 
 
+    }
+
+    void showPopup(String message, String color){
+        Popup p = new Popup();
+        Label popupLabel = new Label(message);
+        popupLabel.setStyle("-fx-background-color: " + color + "; -fx-border-radius:10px; -fx-text-fill: white; -fx-padding: 20px; -fx-font-size:20;");
+
+        p.getContent().add(popupLabel);
+        p.setAutoHide(true);
+
+        // Position the popup near the contact text field
+        Point2D p2d = this.tEnseignants.localToScene(-75.0, 200.0);
+        p.show(this.tEnseignants, p2d.getX() + this.tEnseignants.getScene().getX() + this.tEnseignants.getScene().getWindow().getX(),
+                p2d.getY() + this.tEnseignants.getScene().getY() + this.tEnseignants.getScene().getWindow().getY());
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        delay.setOnFinished(event1 -> p.hide());
+        delay.play();
+    }
+
+    public boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
     }
 }
