@@ -7,7 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class LoginController {
@@ -20,6 +22,9 @@ public class LoginController {
 
     @FXML
     private TextField username;
+
+    @FXML
+    private Text prompt;
 
     @FXML
     void handleLoginButton(ActionEvent event) {
@@ -39,8 +44,14 @@ public class LoginController {
                 }catch (Exception exception){
                     System.out.println(exception.getMessage());
                 }
-            } else System.out.println("wrong credentials");
-        }else System.out.println("empty fields");
+            } else{
+                System.out.println("wrong credentials");
+                this.prompt.setText("Cordonnées Erronées!");
+            };
+        }else {
+            this.prompt.setText("Champs Vides!");
+            System.out.println("empty fields");
+        };
 
     }
 

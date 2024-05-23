@@ -294,8 +294,13 @@ public class EnseignementController implements Initializable {
 
     @FXML
     void handleDeleteUnknown(){
-        empService.deleteAllUknown();
-        showPopup("Seances sans enseignants ont été supprimées avec succès!", "green");
+        int rowsAffected = empService.deleteAllUknown();
+        if(rowsAffected != 0){
+            showPopup("Seances sans enseignants ont été supprimées avec succès!", "green");
+        }else{
+            showPopup("Toutes les séances ont des enseignants", "#e54141");
+        }
+
         refreshTable();
     }
     private void showAlert(String title, String message){

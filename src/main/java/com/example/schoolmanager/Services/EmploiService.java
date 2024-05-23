@@ -128,14 +128,16 @@ public class EmploiService {
             System.out.println(ex.getMessage());
         }
     }
-    public void deleteAllUknown(){
+    public int deleteAllUknown(){
         try{
             String query = "DELETE FROM emploi WHERE matriculeEnseignant = 'UNKNOWN'";
             PreparedStatement ps = cnx.prepareStatement(query);
-            System.out.println(ps.executeUpdate());
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected;
 
         }catch(SQLException ex){
             System.out.println(ex.getMessage());
+            return 0;
         }
     }
 
