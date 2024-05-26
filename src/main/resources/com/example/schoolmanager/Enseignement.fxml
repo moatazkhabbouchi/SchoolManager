@@ -112,6 +112,9 @@
                            <font>
                               <Font name="Helvetica" size="20.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </TextField>
                         <ChoiceBox fx:id="lesClasses" prefHeight="25.0" prefWidth="361.0" />
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">

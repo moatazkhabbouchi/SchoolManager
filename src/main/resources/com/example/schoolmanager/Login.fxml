@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanager.Controllers.LoginController">
+   <children>
+      <ImageView fitHeight="802.0" fitWidth="1213.0" layoutX="-345.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@pexels-pixabay-256395.jpg" />
+         </image>
+      </ImageView>
+      <Text layoutX="925.0" layoutY="281.0" strokeType="OUTSIDE" strokeWidth="0.0" text="School Manager" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Text>
+      <TextField id="username" fx:id="username" layoutX="927.0" layoutY="358.0" prefHeight="39.0" prefWidth="295.0" promptText="Utilisateur">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <Button fx:id="loginId" contentDisplay="CENTER" layoutX="949.0" layoutY="502.0" mnemonicParsing="false" onAction="#handleLoginButton" prefHeight="39.0" prefWidth="234.0" style="-fx-background-color: #40a6ce; -fx-text-fill: white;" stylesheets="@style.css" text="Se connecter" textAlignment="CENTER" />
+      <Text fx:id="prompt" layoutX="949.0" layoutY="589.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Utlisier nom d'utilisateur assigné par l'admin pour vour connecter" textAlignment="CENTER" wrappingWidth="234.00000000000023" />
+      <Text layoutX="927.0" layoutY="765.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Developpé par Khabbouchi Moataz &amp; Miladi Yassine" wrappingWidth="304.86328125">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Text>
+      <PasswordField fx:id="password" layoutX="928.0" layoutY="425.0" prefHeight="39.0" prefWidth="295.0" promptText="Mot de passe">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </PasswordField>
+   </children>
+</AnchorPane>
